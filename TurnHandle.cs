@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum BattleState
 {
@@ -20,6 +21,7 @@ public class TurnHandle : MonoBehaviour
     private GameObject[] EnemyAtks;
     public GameObject PlayerUi;
     public PlayerCtrl Player;
+    int AtkCount = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -38,8 +40,8 @@ public class TurnHandle : MonoBehaviour
 
         else if (state == BattleState.PlayerTurn)
 		{
-
-		}
+            
+        }
 
         else if (state == BattleState.EnemyTurn)
 		{
@@ -58,6 +60,9 @@ public class TurnHandle : MonoBehaviour
                     foreach (EnemyProfile e in EnemiesInBattle)
 					{
                         int AtkNumb = Random.Range(0, e.EnemiesAttacks.Length);
+                        //=+ 1;
+                        //Debug.Log(AtkNumb);
+
                         Instantiate(e.EnemiesAttacks[AtkNumb], Vector3.zero, Quaternion.identity);
 					}
 
@@ -79,6 +84,7 @@ public class TurnHandle : MonoBehaviour
                     if (enemyfin)
 					{
                         EnemyFinishedTurn();
+                        AtkCount++;
 					}
 				}
 			}
@@ -86,12 +92,19 @@ public class TurnHandle : MonoBehaviour
 
         else if (state == BattleState.FinishedTurn)
 		{
-            Player.gameObject.SetActive(false);
+            //Player.gameObject.SetActive(false);
 
             if (Player.GetComponent<PlayerHealth>().HP < 0)
 			{
                 state = BattleState.Lost;
-			}
+                Time.timeScale = 1;
+                SceneManager.LoadScene("Lost");
+            }
+
+            if (AtkCount > 5)
+            {
+                state = BattleState.Won;
+            }
 
             else
 			{
@@ -101,16 +114,17 @@ public class TurnHandle : MonoBehaviour
 
         else if (state == BattleState.Won)
 		{
-            //чето сюда
-		}
+            Time.timeScale = 1;
+            SceneManager.LoadScene("Win");
+        }
     }
 
     public void PlayerAct()
 	{
-        playerfinishTurn();
+        PlayerfinishTurn();
 	}
 
-    void playerfinishTurn()
+    void PlayerfinishTurn()
 	{
         //PlayerUi.SetActive(false);
         state = BattleState.EnemyTurn;
@@ -125,5 +139,6 @@ public class TurnHandle : MonoBehaviour
 
         enemyActed = false;
         state = BattleState.FinishedTurn;
-	}
+        Player.gameObject.SetActive(false);
+    }
 }
