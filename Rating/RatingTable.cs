@@ -53,7 +53,6 @@ public class RatingTable : MonoBehaviour
 		{
 			Debug.Log(username);
 			Debug.Log("Error connecting to the server...");
-
 		}
 
 		yield return null;
