@@ -27,14 +27,6 @@ public class RatingTable : MonoBehaviour
 		string username = MainManager.Instance.PlayerName;
 		int score = MainManager.Instance.PlayerScore;
 
-		/*WWW www = new WWW($"{ratEndpoint}?rusername={username}&rscore={score}");
-		ratinglineEntryList = new List<RatinglineEntry>();
-		if (www.isDone) {
-			var reqResult = www.text;
-			ParseRequest(reqResult);
-			CreateTable();
-		};*/
-
 		UnityWebRequest request = UnityWebRequest.Get($"{ratEndpoint}?rusername={username}&rscore={score}");
 		var handler = request.SendWebRequest();
 
