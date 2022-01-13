@@ -16,41 +16,14 @@ public class MiniEnemyController : MonoBehaviour
 	private float speed;
 	private float timeBtwAttack;
 	private float stopTime;
-
-	//
-	/*private MoveState _moveState = MoveState.Idle;
-	//private DirectionState _directionState = DirectionState.Right;
-
-	enum DirectionState
-	{ 
-		Right,
-		Left
-	}
-
-	enum MoveState
-	{ 
-		Idle,
-		Run,
-		Attack
-	}*/
-
-
-
-
-
 	private Transform target;
-	/*[SerializeField]
-	//private float speed;
-	//[SerializeField]
-	private float range;*/
+
 
 	private void Start()
 	{
 		anim = GetComponent<Animator>();
-		//target = FindObjectOfType<Player_TopDownMovement>().transform;
 		target = FindObjectOfType<Player_Boss>().transform;
 		player = FindObjectOfType<Player>();
-		
 	}
 
 
@@ -90,15 +63,10 @@ public class MiniEnemyController : MonoBehaviour
 		health -= damage;
 	}
 
-	//public void OnTriggerStay(Collider2D other)
-	//public void OnTriggerStay(Collider2D collision)
 	private void OnTriggerEnter2D(Collider2D other)
 
 	{
-		//if (other.CompareTag("Player_Boss"))
 		if (other.CompareTag("Player"))
-		//if (other.CompareTag("Player_Boss"))
-
 		{
 			if (timeBtwAttack <= 0)
 			{
@@ -112,29 +80,6 @@ public class MiniEnemyController : MonoBehaviour
 
 	}
 
-
-
-
-	/*public Animation attack;
-	private void OnTriggerEnter2D(Collider2D other)
-	{
-		Debug.Log("Collider Entered.");
-		if (other.tag == "Player")
-		{
-			attack.gameObject.GetComponent<KnucklesAnimation>().PlayAnimation();
-			//attack.GetComponent<Player_Boss>().PlayAnimation();
-			//Destroy(this);
-		}
-
-		public void PlayAnimation()
-		{
-			attack.Play();
-		}
-
-	}
-
-}*/
-
 	public Animation attack;
 
 	private void OnCollisionEnter(Collision collision)
@@ -147,18 +92,12 @@ public class MiniEnemyController : MonoBehaviour
 		attack.Play();
 	}
 
-
-
-
-
-
 	/*
 	public void OnEnemyAttack()
 	{
 		player.ChangeHealth(-damage);
 		timeBtwAttack = startTimeBtwAttack;
 	}*/
-
 
 	public void FollowPlayer()
 	{
