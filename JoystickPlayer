@@ -1,0 +1,84 @@
+using UnityEngine;
+
+public class Player_TopDownMovement1 : MonoBehaviour
+{
+    public Joystick joystick;
+    public ControlType controlType;
+    public enum ControlType { PC, Android };
+    //public int velocity;
+    public int speed;
+    private Rigidbody2D rb;
+    private Vector2 moveInput;
+    private Vector2 moveVelocity;
+
+    private Vector3 movement;
+    private Animator playerAnimator;
+
+    // для PlayerPosition
+    public VectorValue pos;
+
+
+    //совместить игровые мезаники игроков
+    //public Joystick joystick;//
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+
+        transform.position = pos.initialValue;
+
+        playerAnimator = GetComponent<Animator>();
+    }
+
+    void Update()
+    {
+
+        if (controlType == ControlType.Android)
+        {
+            if ((movement.x == 0) && (movement.y == 0))
+            {
+                playerAnimator.SetBool("isRunning", false);
+            };
+
+            movement = new Vector2(joystick.Horizontal, joystick.Vertical);
+
+            playerAnimator.SetFloat("Horizontal", movement.x);
+            playerAnimator.SetFloat("Vertical", movement.y);
+            playerAnimator.SetFloat("Amount", movement.magnitude);
+
+            if ((movement.x != 0) && (movement.y != 0))
+            {
+                playerAnimator.SetBool("isRunning", true);
+            };
+
+        }
+
+
+        else if (controlType == ControlType.PC)
+        {
+            //содержит информацию по горизонтальной и вертикальной осям с клавиатуры
+            if ((movement.x == 0) && (movement.y == 0))
+            {
+                playerAnimator.SetBool("isRunning", false);
+            };
+
+            movement = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0);
+
+            playerAnimator.SetFloat("Horizontal", movement.x);
+            playerAnimator.SetFloat("Vertical", movement.y);
+            playerAnimator.SetFloat("Amount", movement.magnitude);
+
+            if ((movement.x != 0) || (movement.y != 0))
+            {
+                playerAnimator.SetBool("isRunning", true);
+            };
+
+            transform.position = transform.position + movement * speed * Time.deltaTime;
+        }
+        moveVelocity = movement.normalized * speed;
+    }
+
+    void FixedUpdate()
+    {
+        rb.MovePosition(rb.position + moveVelocity * Time.fixedDeltaTime);
+    }
+}
